@@ -2625,7 +2625,7 @@ Elm.JumpingBalls.make = function (_elm) {
                       ,_0: _v0._2
                       ,_1: _v0._3};}
             _E.Case($moduleName,
-            "on line 409, column 42 to 52");
+            "on line 420, column 42 to 52");
          }();
       };
       var mouseDeltaFun = F2(function (_v6,
@@ -2646,10 +2646,10 @@ Elm.JumpingBalls.make = function (_elm) {
                                                                         ,_2: _v7._2
                                                                         ,_3: _v7._3};}
                     _E.Case($moduleName,
-                    "between lines 404 and 407");
+                    "between lines 415 and 418");
                  }();}
             _E.Case($moduleName,
-            "between lines 404 and 407");
+            "between lines 415 and 418");
          }();
       });
       var mouseDownPosition = A2(Signal._op["~"],
@@ -2676,13 +2676,13 @@ Elm.JumpingBalls.make = function (_elm) {
       mouseDownPosition));
    }();
    var footer = Text.markdown("<div style=\"height:0;width:0;\">&nbsp;</div><p>© 2014 Marcin Osowski</p><div style=\"height:0;width:0;\">&nbsp;</div>",
-   "370:10");
+   "381:10");
    var header = Text.markdown("<div style=\"height:0;width:0;\">&nbsp;</div><p>A Web GL Demo. Drag to rotate.</p><div style=\"height:0;width:0;\">&nbsp;</div>",
-   "366:10");
+   "377:10");
    var newSphere = F2(function (vel,
    colIdx) {
       return function () {
-         var radius = 0.15;
+         var radius = 0.2;
          var pos = A3(Math.Vector3.vec3,
          0.0,
          0.0,
@@ -2720,58 +2720,89 @@ Elm.JumpingBalls.make = function (_elm) {
    0.7,
    1.3),
    4);
-   var bounceSphereSphere = F2(function (other,
-   $this) {
+   var bounceSphereSphere = F3(function ($this,
+   other,
+   _v17) {
       return function () {
-         var radiusSum = $this.radius + other.radius;
-         var dir = A2(Math.Vector3.sub,
-         other.pos,
-         $this.pos);
-         var dist = Math.Vector3.length(dir);
-         return _U.cmp(dist,
-         1.0e-7) < 0 ? $this : _U.cmp(dist,
-         radiusSum) > 0 ? $this : function () {
-            var deltaPos = A2(Math.Vector3.scale,
-            (radiusSum - dist) * -0.5,
-            dir);
-            var newPos = A2(Math.Vector3.add,
-            $this.pos,
-            deltaPos);
-            var normDir = A2(Math.Vector3.scale,
-            1.0 / dist,
-            dir);
-            var deltaVel1Val = 0 - A2(Math.Vector3.dot,
-            $this.vel,
-            normDir);
-            var deltaVel2Val = A2(Math.Vector3.dot,
-            other.vel,
-            normDir);
-            var deltaVel1 = A2(Math.Vector3.scale,
-            deltaVel1Val,
-            normDir);
-            var deltaVel2 = A2(Math.Vector3.scale,
-            deltaVel2Val,
-            normDir);
-            var deltaVel = A2(Math.Vector3.add,
-            deltaVel1,
-            deltaVel2);
-            var newVel = A2(Math.Vector3.add,
-            $this.vel,
-            deltaVel);
-            return {_: {}
-                   ,col: $this.col
-                   ,pos: newPos
-                   ,radius: $this.radius
-                   ,vel: newVel};
-         }();
+         switch (_v17.ctor)
+         {case "_Tuple2":
+            return function () {
+                 var radiusSum = $this.radius + other.radius;
+                 var dir = A2(Math.Vector3.sub,
+                 other.pos,
+                 $this.pos);
+                 var dist = Math.Vector3.length(dir);
+                 return _U.cmp(dist,
+                 1.0e-7) < 0 ? {ctor: "_Tuple2"
+                               ,_0: _v17._0
+                               ,_1: _v17._1} : _U.cmp(dist,
+                 radiusSum) > 0 ? {ctor: "_Tuple2"
+                                  ,_0: _v17._0
+                                  ,_1: _v17._1} : function () {
+                    var deltaPosVal = (dist - radiusSum) * 0.5;
+                    var normDir = A2(Math.Vector3.scale,
+                    1.0 / dist,
+                    dir);
+                    var deltaPos = A2(Math.Vector3.scale,
+                    deltaPosVal,
+                    normDir);
+                    var newDPos = A2(Math.Vector3.add,
+                    deltaPos,
+                    _v17._0);
+                    var deltaVel1Val = 0 - A2(Math.Vector3.dot,
+                    $this.vel,
+                    normDir);
+                    var deltaVel2Val = A2(Math.Vector3.dot,
+                    other.vel,
+                    normDir);
+                    var deltaVel1 = A2(Math.Vector3.scale,
+                    deltaVel1Val,
+                    normDir);
+                    var deltaVel2 = A2(Math.Vector3.scale,
+                    deltaVel2Val,
+                    normDir);
+                    var deltaVel = A2(Math.Vector3.add,
+                    deltaVel1,
+                    deltaVel2);
+                    var newDVel = A2(Math.Vector3.add,
+                    deltaVel,
+                    _v17._1);
+                    return {ctor: "_Tuple2"
+                           ,_0: newDPos
+                           ,_1: newDVel};
+                 }();
+              }();}
+         _E.Case($moduleName,
+         "between lines 301 and 326");
       }();
    });
    var bounceSphereSpheres = F2(function (spheres,
    sphere) {
-      return A3(List.foldl,
-      bounceSphereSphere,
-      sphere,
-      spheres);
+      return function () {
+         var zeroVec = A3(Math.Vector3.vec3,
+         0.0,
+         0.0,
+         0.0);
+         var $ = A3(List.foldl,
+         bounceSphereSphere(sphere),
+         {ctor: "_Tuple2"
+         ,_0: zeroVec
+         ,_1: zeroVec},
+         spheres),
+         dpos = $._0,
+         dvel = $._1;
+         var newPos = A2(Math.Vector3.add,
+         sphere.pos,
+         dpos);
+         var newVel = A2(Math.Vector3.add,
+         sphere.vel,
+         dvel);
+         return {_: {}
+                ,col: sphere.col
+                ,pos: newPos
+                ,radius: sphere.radius
+                ,vel: newVel};
+      }();
    });
    var bounceAxisCube = F3(function (x0,
    v0,
@@ -2845,25 +2876,25 @@ Elm.JumpingBalls.make = function (_elm) {
          return sphere;
       }();
    });
-   var projMatrix = F2(function (_v17,
-   _v18) {
+   var projMatrix = F2(function (_v21,
+   _v22) {
       return function () {
-         switch (_v18.ctor)
+         switch (_v22.ctor)
          {case "_Tuple2":
             return function () {
-                 switch (_v17.ctor)
+                 switch (_v21.ctor)
                  {case "_Tuple2":
                     return function () {
                          var xRotVec = A3(Math.Vector3.vec3,
                          0.0,
                          1.0,
                          0.0);
-                         var xRotAngle = Basics.toFloat(_v18._0) / 100.0;
+                         var xRotAngle = Basics.toFloat(_v22._0) / 100.0;
                          var yRotVec = A3(Math.Vector3.vec3,
                          -1.0,
                          0.0,
                          0.0);
-                         var yRotAngle = Basics.toFloat(_v18._1) / 100.0;
+                         var yRotAngle = Basics.toFloat(_v22._1) / 100.0;
                          var up = A3(Math.Vector3.vec3,
                          0.0,
                          1.0,
@@ -2878,7 +2909,7 @@ Elm.JumpingBalls.make = function (_elm) {
                          -4.0);
                          var zfar = 100.0;
                          var znear = 1.0e-2;
-                         var aspect = Basics.toFloat(_v17._0) / Basics.toFloat(_v17._1);
+                         var aspect = Basics.toFloat(_v21._0) / Basics.toFloat(_v21._1);
                          var fovy = 45.0;
                          return A2(Math.Matrix4.mul,
                          A2(Math.Matrix4.mul,
@@ -2933,44 +2964,44 @@ Elm.JumpingBalls.make = function (_elm) {
                          0.0,
                          0.0)
                          ,_4: 0};
-         var projection = function (_v25) {
+         var projection = function (_v29) {
             return function () {
-               switch (_v25.ctor)
+               switch (_v29.ctor)
                {case "_Tuple5":
                   return {ctor: "_Tuple4"
-                         ,_0: _v25._0
-                         ,_1: _v25._1
-                         ,_2: _v25._3
-                         ,_3: _v25._4};}
+                         ,_0: _v29._0
+                         ,_1: _v29._1
+                         ,_2: _v29._3
+                         ,_3: _v29._4};}
                _E.Case($moduleName,
-               "on line 355, column 55 to 75");
+               "on line 366, column 55 to 75");
             }();
          };
-         var folder = F2(function (_v32,
-         _v33) {
+         var folder = F2(function (_v36,
+         _v37) {
             return function () {
-               switch (_v33.ctor)
+               switch (_v37.ctor)
                {case "_Tuple5":
                   return function () {
-                       switch (_v32.ctor)
+                       switch (_v36.ctor)
                        {case "_Tuple5":
-                          return _U.eq(_v33._2,
-                            _v32._2) ? {ctor: "_Tuple5"
-                                       ,_0: _v32._0
+                          return _U.eq(_v37._2,
+                            _v36._2) ? {ctor: "_Tuple5"
+                                       ,_0: _v36._0
                                        ,_1: Empty
-                                       ,_2: _v32._2
-                                       ,_3: _v32._3
-                                       ,_4: _v32._4} : {ctor: "_Tuple5"
-                                                       ,_0: _v32._0
-                                                       ,_1: _v32._1
-                                                       ,_2: _v32._2
-                                                       ,_3: _v32._3
-                                                       ,_4: _v32._4};}
+                                       ,_2: _v36._2
+                                       ,_3: _v36._3
+                                       ,_4: _v36._4} : {ctor: "_Tuple5"
+                                                       ,_0: _v36._0
+                                                       ,_1: _v36._1
+                                                       ,_2: _v36._2
+                                                       ,_3: _v36._3
+                                                       ,_4: _v36._4};}
                        _E.Case($moduleName,
-                       "between lines 351 and 354");
+                       "between lines 362 and 365");
                     }();}
                _E.Case($moduleName,
-               "between lines 351 and 354");
+               "between lines 362 and 365");
             }();
          });
          var col = A3(Random.range,
@@ -2983,7 +3014,7 @@ Elm.JumpingBalls.make = function (_elm) {
             return Math.Vector3.sub(A3(Math.Vector3.vec3,
             0.5,
             0.5,
-            0.5))(Math.Vector3.scale(3.5)(A3(Math.Vector3.vec3,
+            0.5))(Math.Vector3.scale(2.5)(A3(Math.Vector3.vec3,
             x,
             y,
             z)));
@@ -3025,19 +3056,19 @@ Elm.JumpingBalls.make = function (_elm) {
    var buttonKeys = Graphics.Input.input(Empty);
    var RemoveAll = {ctor: "RemoveAll"};
    var AddNew = {ctor: "AddNew"};
-   var iterSpheres = F2(function (_v46,
+   var iterSpheres = F2(function (_v50,
    spheres) {
       return function () {
-         switch (_v46.ctor)
+         switch (_v50.ctor)
          {case "_Tuple4":
-            return _U.eq(_v46._1,
-              RemoveAll) ? _L.fromArray([]) : _U.eq(_v46._1,
+            return _U.eq(_v50._1,
+              RemoveAll) ? _L.fromArray([]) : _U.eq(_v50._1,
               AddNew) ? _L.append(spheres,
               _L.fromArray([A2(newSphere,
-              _v46._2,
-              _v46._3)])) : function () {
+              _v50._2,
+              _v50._3)])) : function () {
                  var newSpheres = A2(List.map,
-                 A2(iterSphere,_v46._0,spheres),
+                 A2(iterSphere,_v50._0,spheres),
                  spheres);
                  return A2(List.map,
                  function ($) {
@@ -3188,7 +3219,7 @@ Elm.JumpingBalls.make = function (_elm) {
       return function () {
          var mesh = A3(sphereMesh,
          10,
-         14,
+         13,
          s.col);
          var newModelView = A3(Math.Matrix4.scale3,
          s.radius,
@@ -3467,14 +3498,14 @@ Elm.JumpingBalls.make = function (_elm) {
          newUnifs);
       }();
    });
-   var scene = F3(function (_v52,
-   _v53,
+   var scene = F3(function (_v56,
+   _v57,
    spheres) {
       return function () {
-         switch (_v53.ctor)
+         switch (_v57.ctor)
          {case "_Tuple2":
             return function () {
-                 switch (_v52.ctor)
+                 switch (_v56.ctor)
                  {case "_Tuple2":
                     return function () {
                          var cubeEdgeWidth = 0.15;
@@ -3492,11 +3523,11 @@ Elm.JumpingBalls.make = function (_elm) {
                          var modelView = Math.Matrix4.identity;
                          var proj = A2(projMatrix,
                          {ctor: "_Tuple2"
-                         ,_0: _v52._0
-                         ,_1: _v52._1},
+                         ,_0: _v56._0
+                         ,_1: _v56._1},
                          {ctor: "_Tuple2"
-                         ,_0: _v53._0
-                         ,_1: _v53._1});
+                         ,_0: _v57._0
+                         ,_1: _v57._1});
                          var unifs = {_: {}
                                      ,lightSrc: lightSrc
                                      ,modelView: modelView
@@ -3510,8 +3541,8 @@ Elm.JumpingBalls.make = function (_elm) {
                          spheres));
                          return A2(Graphics.WebGL.webgl,
                          {ctor: "_Tuple2"
-                         ,_0: _v52._0
-                         ,_1: _v52._1},
+                         ,_0: _v56._0
+                         ,_1: _v56._1},
                          entities);
                       }();}
                  _E.Case($moduleName,
@@ -3521,18 +3552,18 @@ Elm.JumpingBalls.make = function (_elm) {
          "between lines 223 and 234");
       }();
    });
-   var layout = F3(function (_v60,
-   _v61,
+   var layout = F3(function (_v64,
+   _v65,
    spheres) {
       return function () {
-         switch (_v61.ctor)
+         switch (_v65.ctor)
          {case "_Tuple2":
             return function () {
-                 switch (_v60.ctor)
+                 switch (_v64.ctor)
                  {case "_Tuple2":
                     return A3(Graphics.Element.container,
-                      _v60._0,
-                      _v60._1,
+                      _v64._0,
+                      _v64._1,
                       Graphics.Element.midTop)(A2(Graphics.Element.flow,
                       Graphics.Element.down,
                       _L.fromArray([A2(Graphics.Element.spacer,
@@ -3544,8 +3575,8 @@ Elm.JumpingBalls.make = function (_elm) {
                                    ,_0: 600
                                    ,_1: 375},
                                    {ctor: "_Tuple2"
-                                   ,_0: _v61._0
-                                   ,_1: _v61._1},
+                                   ,_0: _v65._0
+                                   ,_1: _v65._1},
                                    spheres))
                                    ,A2(Graphics.Element.spacer,1,7)
                                    ,A2(Graphics.Element.flow,
@@ -3560,10 +3591,10 @@ Elm.JumpingBalls.make = function (_elm) {
                                                 "Remove all")]))
                                    ,footer])));}
                  _E.Case($moduleName,
-                 "between lines 383 and 394");
+                 "between lines 394 and 405");
               }();}
          _E.Case($moduleName,
-         "between lines 383 and 394");
+         "between lines 394 and 405");
       }();
    });
    var main = A2(Signal._op["~"],
@@ -3881,4 +3912,4 @@ Elm.Math.Vector3.make = function (_elm) {
                               ,cross: cross
                               ,Vec3: Vec3};
    return _elm.Math.Vector3.values;
-};</script><style type="text/css">html,head,body { padding:0; margin:0; }body { font-family: calibri, helvetica, arial, sans-serif; }</style></head><body><script type="text/javascript">Elm.fullscreen(Elm.JumpingBalls)</script><div><div style="padding: 0px; margin: 0px; position: relative; overflow: hidden; width: 960px; height: 943px;"><div style="padding: 0px; margin: auto; width: 600px; height: 576px; position: absolute; left: 50%; top: 0px; transform: translateX(-300px);"><div style="padding: 0px; margin: 0px; width: 1px; height: 50px;"></div><div style="padding: 0px; margin: 0px; visibility: visible; pointer-events: auto; width: 208px; height: 52px;"><div style="height:0;width:0;">&nbsp;</div><p>A Web GL Demo. Drag to rotate.</p><div style="height:0;width:0;">&nbsp;</div></div><div style="padding: 0px; margin: 0px; overflow: hidden; width: 600px; height: 375px; background-color: rgb(46, 52, 54);"><canvas height="375" width="600" style="padding: 0px; margin: 0px; width: 600px; height: 375px; display: block; position: absolute;"></canvas></div><div style="padding: 0px; margin: 0px; width: 1px; height: 7px;"></div><div style="padding: 0px; margin: 0px; width: 200px; height: 40px;"><button style="padding: 0px; margin: 0px; display: block; pointer-events: auto; width: 100px; height: 40px; float: left;">Add new</button><button style="padding: 0px; margin: 0px; display: block; pointer-events: auto; width: 100px; height: 40px; float: left;">Remove all</button></div><div style="padding: 0px; margin: 0px; visibility: visible; pointer-events: auto; width: 157px; height: 52px;"><div style="height:0;width:0;">&nbsp;</div><p>© 2014 Marcin Osowski</p><div style="height:0;width:0;">&nbsp;</div></div></div></div></div><noscript></noscript></body></html>
+};</script><style type="text/css">html,head,body { padding:0; margin:0; }body { font-family: calibri, helvetica, arial, sans-serif; }</style></head><body><script type="text/javascript">Elm.fullscreen(Elm.JumpingBalls)</script><div><div style="padding: 0px; margin: 0px; position: relative; overflow: hidden; width: 1920px; height: 943px;"><div style="padding: 0px; margin: auto; width: 600px; height: 576px; position: absolute; left: 50%; top: 0px; transform: translateX(-300px);"><div style="padding: 0px; margin: 0px; width: 1px; height: 50px;"></div><div style="padding: 0px; margin: 0px; visibility: visible; pointer-events: auto; width: 208px; height: 52px;"><div style="height:0;width:0;">&nbsp;</div><p>A Web GL Demo. Drag to rotate.</p><div style="height:0;width:0;">&nbsp;</div></div><div style="padding: 0px; margin: 0px; overflow: hidden; width: 600px; height: 375px; background-color: rgb(46, 52, 54);"><canvas height="375" width="600" style="padding: 0px; margin: 0px; width: 600px; height: 375px; display: block; position: absolute;"></canvas></div><div style="padding: 0px; margin: 0px; width: 1px; height: 7px;"></div><div style="padding: 0px; margin: 0px; width: 200px; height: 40px;"><button style="padding: 0px; margin: 0px; display: block; pointer-events: auto; width: 100px; height: 40px; float: left;">Add new</button><button style="padding: 0px; margin: 0px; display: block; pointer-events: auto; width: 100px; height: 40px; float: left;">Remove all</button></div><div style="padding: 0px; margin: 0px; visibility: visible; pointer-events: auto; width: 157px; height: 52px;"><div style="height:0;width:0;">&nbsp;</div><p>© 2014 Marcin Osowski</p><div style="height:0;width:0;">&nbsp;</div></div></div></div></div><noscript></noscript></body></html>
